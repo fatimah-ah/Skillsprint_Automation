@@ -1,0 +1,23 @@
+{
+  "name": "skillsprint_automation",
+  "version": "1.0.0",
+  "description": "A scalable UI automation framework built with Playwright and JavaScript for testing the SkillSprint platform. It follows industry best practices including Page Object Model, data-driven testing, reusable utilities, and detailed reporting to ensure reliability, maintainability, and efficient test execution.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fatimah-ah/Skillsprint_Automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fatimah-ah/Skillsprint_Automation/issues"
+  },
+  "homepage": "https://github.com/fatimah-ah/Skillsprint_Automation#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.2"
+  }
+}
