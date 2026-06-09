@@ -18,6 +18,7 @@
   "homepage": "https://github.com/fatimah-ah/Skillsprint_Automation#readme",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.9.2"
+    "@types/node": "^25.9.2",
+    "allure-playwright": "^3.9.0"
   }
 }
