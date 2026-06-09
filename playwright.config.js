@@ -32,7 +32,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: 'https://skillsprint-gdcfg9h6e4dxakcf.centralindia-01.azurewebsites.net',
-    headless: false,
+    headless: !!process.env.CI,
     screenshot: 'only-on-failure',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
