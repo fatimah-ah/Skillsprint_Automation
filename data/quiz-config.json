@@ -1,0 +1,14 @@
+{
+  "expectedCardCount": 6,
+  "courseNames": [
+    "JavaScript",
+    "Python",
+    "Data Structures",
+    "Node.js",
+    "React",
+    "CSS"
+  ],
+  "levelNames": ["Basic", "Intermediate", "Advanced"],
+  "searchTerm": "JavaScript",
+  "searchExpectedCount": 1
+}

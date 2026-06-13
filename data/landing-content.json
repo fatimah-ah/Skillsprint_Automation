@@ -1,0 +1,11 @@
+{
+  "pageTitle": "SkillSprint | Workspace for Technical Growth",
+  "heroHeading": "Where Developers",
+  "heroCta": "Start Your First Sprint",
+  "navLinks": ["Features", "About", "Login"],
+  "enterWorkspaceBtn": "Enter Workspace",
+  "splashSelector": "#splash",
+  "bentoGridCount": 6,
+  "footerSections": ["Workspace", "Tools", "Resources", "Legal"],
+  "footerCopyright": "2024 SkillSprint"
+}

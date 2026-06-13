@@ -1,9 +1,9 @@
-# Node.js
 node_modules/
-
-# Playwright
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
+reports/
+logs/
+fixtures/auth-state.json
+playwright-report/
+test-results/
+allure-results/
+allure-report/
+*.log

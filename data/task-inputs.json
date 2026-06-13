@@ -1,0 +1,21 @@
+{
+  "validTask": {
+    "title": "Build Playwright Framework",
+    "description": "Implement POM, data-driven tests, and Allure reporting",
+    "dueDate": "2025-12-31",
+    "priority": "High",
+    "subtask": "Set up folder structure"
+  },
+  "noTitleTask": {
+    "title": "",
+    "description": "Task with no title",
+    "priority": "Medium"
+  },
+  "lowPriorityTask": {
+    "title": "Review PR",
+    "description": "Review team pull request",
+    "priority": "Low"
+  },
+  "filterTypes": ["All", "In Progress", "Completed"],
+  "subtasks": ["Write unit tests", "Set up CI/CD", "Review documentation"]
+}

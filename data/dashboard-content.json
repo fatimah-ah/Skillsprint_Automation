@@ -1,0 +1,11 @@
+{
+  "sidebarLinkCount": 7,
+  "walletCardLabels": ["Credits", "Spent", "Earned"],
+  "streakPattern": "Day Streak",
+  "reminder": {
+    "text": "Review pull requests",
+    "time": "09:00"
+  },
+  "searchTerm": "Playwright",
+  "notifClearBtnText": "Clear All"
+}

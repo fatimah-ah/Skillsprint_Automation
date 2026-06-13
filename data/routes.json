@@ -1,0 +1,16 @@
+{
+  "landing": "/",
+  "login": "/login.html",
+  "signup": "/signup.html",
+  "getStarted": "/getstarted.html",
+  "dashboard": "/dashboard.html",
+  "quiz": "/quiz.html",
+  "tasks": "/task.html",
+  "forgotPassword": "/forget-password.html",
+  "adminLogin": "/admin-login.html",
+  "authGuardedRoutes": [
+    "/dashboard.html",
+    "/quiz.html",
+    "/task.html"
+  ]
+}
