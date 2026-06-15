@@ -39,11 +39,21 @@ class BasePage {
    * @param {string} name
    * @returns {Promise<Buffer>}
    */
-  async takeScreenshot(name = 'screenshot') {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `${name}_${timestamp}.png`;
-    return await this.page.screenshot({ path: `reports/screenshots/${filename}`, fullPage: true });
-  }
+async takeScreenshot(name = 'screenshot') {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const filename = `${name}_${timestamp}.png`;
+  const path = `reports/screenshots/${filename}`;
+  
+  const buffer = await this.page.screenshot({ path: path, fullPage: true });
+
+  await test.info().attachments.push({
+    name: name,
+    contentType: 'image/png',
+    path: path
+  });
+  
+  return buffer;
+}
 
   /**
    * Wait for a toast/alert message element to appear.

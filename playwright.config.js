@@ -1,9 +1,6 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 
-/**
- * @see https://playwright.dev/docs/test-configuration
- */
 module.exports = defineConfig({
   testDir: './specs',
   timeout: 60000,
@@ -15,18 +12,25 @@ module.exports = defineConfig({
   },
   workers: process.env.CI ? 1 : 1,
 
+  /* 1. Reporter Configuration Update */
   reporter: [
     ['list'],
-    ['html', { outputFolder: 'reports/playwright-report', open: 'never' }],
-    ['allure-playwright', { resultsDir: 'reports/allure-results' }]
+    ['allure-playwright', { 
+      outputFolder: 'allure-results', // Explicitly folder ka naam batayein
+      detail: true,
+      suiteTitle: true
+    }]
   ],
 
   use: {
     baseURL: 'https://skillsprint-gdcfg9h6e4dxakcf.centralindia-01.azurewebsites.net',
     headless: true,
-    screenshot: 'only-on-failure',
-    video: 'off',
-    trace: 'on-first-retry',
+    
+    screenshot: 'on', 
+    
+    trace: 'on', 
+    
+    video: 'on-first-retry',
     actionTimeout: 10000,
     navigationTimeout: 20000
   },
