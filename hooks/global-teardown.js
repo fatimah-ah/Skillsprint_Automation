@@ -1,11 +1,6 @@
 const { exec } = require('child_process');
 const path = require('path');
 
-/**
- * Global teardown runs once after the entire test suite.
- * - Logs test completion time
- * - Generates Allure report automatically
- */
 async function globalTeardown() {
   const endTime = new Date().toISOString();
   console.log(`[GlobalTeardown] Suite finished at: ${endTime}`);

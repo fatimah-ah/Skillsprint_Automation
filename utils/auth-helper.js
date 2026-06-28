@@ -4,12 +4,6 @@ const fs = require('fs');
 const AUTH_STATE_PATH = path.join(__dirname, '../fixtures/auth-state.json');
 const BASE_URL = 'https://skillsprint-gdcfg9h6e4dxakcf.centralindia-01.azurewebsites.net';
 
-/**
- * Logs in via UI interaction (email + password form submission).
- * @param {import('@playwright/test').Page} page
- * @param {string} email
- * @param {string} password
- */
 async function loginViaUI(page, email, password) {
   await page.goto(`${BASE_URL}/login.html`, { waitUntil: 'domcontentloaded' });
   await page.fill('#email, input[type="email"], input[name="email"]', email);
@@ -18,11 +12,6 @@ async function loginViaUI(page, email, password) {
   await page.waitForURL('**/dashboard**', { timeout: 15000 }).catch(() => {});
 }
 
-/**
- * Injects a JWT token directly into localStorage to bypass UI login.
- * @param {import('@playwright/test').Page} page
- * @param {string} token
- */
 async function loginViaStorage(page, token) {
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
   await page.evaluate((t) => {
@@ -32,10 +21,6 @@ async function loginViaStorage(page, token) {
   }, token);
 }
 
-/**
- * Clears session storage and localStorage to simulate logout.
- * @param {import('@playwright/test').Page} page
- */
 async function clearSession(page) {
   await page.evaluate(() => {
     localStorage.clear();
@@ -43,10 +28,6 @@ async function clearSession(page) {
   });
 }
 
-/**
- * Loads the saved auth state from fixtures/auth-state.json if available.
- * @returns {string|null} saved storage state path or null
- */
 function getStorageStatePath() {
   if (fs.existsSync(AUTH_STATE_PATH)) {
     return AUTH_STATE_PATH;
@@ -54,10 +35,45 @@ function getStorageStatePath() {
   return null;
 }
 
+async function loginAndJoinRoom(page, email, password, sessionId) {
+  await loginViaUI(page, email, password);
+  await page.goto(`${BASE_URL}/livevideo.html?sessionId=${sessionId}`);
+}
+
+async function deleteTestSessions(request, token, sessionPrefix = '[TEST]') {
+  try {
+    const res = await request.get('/api/live-sessions/my-schedule', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok()) return;
+    const sessions = await res.json();
+    for (const session of sessions) {
+      const name = session.sessionName || '';
+      if (
+        name.startsWith(sessionPrefix) ||
+        name.includes('Playwright') ||
+        name.includes('Fareed') ||
+        name.includes('Quick Sync') ||
+        name.includes('Conflict') ||
+        name.includes('Mentor Room')
+      ) {
+        await request.delete(`/api/live-sessions/${session._id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
+    }
+  } catch (e) {
+    console.warn('[deleteTestSessions] Failed:', e.message);
+  }
+}
+
 module.exports = {
   loginViaUI,
   loginViaStorage,
   clearSession,
   getStorageStatePath,
-  AUTH_STATE_PATH
+  AUTH_STATE_PATH,
+  loginAndJoinRoom,
+  deleteTestSessions
 };
+

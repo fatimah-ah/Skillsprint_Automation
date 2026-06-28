@@ -6,11 +6,6 @@ const fs = require('fs');
 
 const AUTH_STATE_PATH = path.join(__dirname, 'auth-state.json');
 
-/**
- * Custom fixture that provides an authenticated page context.
- * Uses storageState from auth-state.json generated during global setup.
- * Quiz, Task, and Dashboard tests use this to skip UI login.
- */
 const test = base.extend({
   loggedInPage: async ({ browser }, use, testInfo) => {
     let storageState = undefined;

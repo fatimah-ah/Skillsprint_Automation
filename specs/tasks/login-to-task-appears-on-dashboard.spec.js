@@ -1,41 +1,12 @@
-const { test, expect, request: apiRequest } = require('@playwright/test');
-const fs = require('fs');
-const path = require('path');
+const { test, expect } = require('@playwright/test');
+const { loadCredentials, clearBrowserStorage, cleanupTasksForUser } = require('../../hooks/testHooks');
+
+let credentials;
 
 test.describe('E2E Full Journey', () => {
-  let credentials;
-
-  test.beforeAll(async () => {
-    const credsPath = path.join(__dirname, '../../data/credentials.json');
-    credentials = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
-
-    // Cleanup: delete all leftover test tasks before starting
-    const context = await apiRequest.newContext({
-      baseURL: 'https://skillsprint-gdcfg9h6e4dxakcf.centralindia-01.azurewebsites.net'
-    });
-
-    const loginRes = await context.post('/api/auth/login', {
-      data: {
-        email: credentials.validUser.email,
-        password: credentials.validUser.password
-      }
-    });
-    const { token } = await loginRes.json();
-
-    const tasksRes = await context.get('/api/tasks', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const tasks = await tasksRes.json();
-
-    for (const task of tasks) {
-      if (task.title?.startsWith('Build Playwright Framework - ')) {
-        await context.delete(`/api/tasks/${task._id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      }
-    }
-
-    await context.dispose();
+  test.beforeAll(async ({ request }) => {
+    credentials = loadCredentials();
+    await cleanupTasksForUser(request, credentials);
   });
 
   test('TC-E2E-01 | user logs in, creates a task, and verifies it on dashboard', async ({ page }) => {

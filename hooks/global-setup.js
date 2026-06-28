@@ -5,11 +5,6 @@ const fs = require('fs');
 const AUTH_STATE_PATH = path.join(__dirname, '../fixtures/auth-state.json');
 const BASE_URL = 'https://skillsprint-gdcfg9h6e4dxakcf.centralindia-01.azurewebsites.net';
 
-/**
- * Global setup runs once before the entire test suite.
- * - Validates the app URL is reachable
- * - Performs one login to generate and save auth storageState
- */
 async function globalSetup() {
   const startTime = new Date().toISOString();
   console.log(`[GlobalSetup] Suite started at: ${startTime}`);
