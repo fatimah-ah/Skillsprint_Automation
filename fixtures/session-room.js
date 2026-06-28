@@ -3,8 +3,11 @@ const { getCredentials } = require('../utils/data-reader');
 const { deleteTestSessions } = require('../utils/auth-helper');
 
 const test = base.extend({
-  sessionRoom: [async ({ request }, use) => {
+  sessionRoom: [async ({ playwright }, use) => {
     const credentials = getCredentials();
+    const request = await playwright.request.newContext({
+      baseURL: 'https://skillsprint-gdcfg9h6e4dxakcf.centralindia-01.azurewebsites.net'
+    });
 
     const loginRes = await request.post('/api/auth/login', {
       data: { email: credentials.validUser.email, password: credentials.validUser.password }
@@ -40,6 +43,7 @@ const test = base.extend({
       headers: { Authorization: `Bearer ${token}` }
     });
     console.log('[sessionRoom] Deleted session:', SESSION_ID);
+    await request.dispose();
   }, { scope: 'worker' }]
 });
 
