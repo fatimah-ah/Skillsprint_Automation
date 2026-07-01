@@ -16,7 +16,8 @@ const test = base.extend({
     const context = await browser.newContext({ storageState });
     const page = await context.newPage();
 
-
+    // Navigate to dashboard so the page has a valid origin and is ready for interaction
+    await page.goto('/dashboard.html', { waitUntil: 'domcontentloaded' });
 
     await use(page);
 

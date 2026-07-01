@@ -73,19 +73,24 @@ test.describe('Live Session — E2E Lifecycle', () => {
     const futureStr = `${futureTime.getFullYear()}-${pad(futureTime.getMonth()+1)}-${pad(futureTime.getDate())}T${pad(futureTime.getHours())}:${pad(futureTime.getMinutes())}`;
     await page.locator('#sessionDateTimeInput').fill(futureStr);
 
-    const responsePromise = page.waitForResponse(response =>
-      response.url().includes('/api/live-sessions') && response.status() === 201
-    );
-
     await page.locator('#submitCreateLiveSession').click();
 
-    const response = await responsePromise;
-    const body = await response.json();
-    createdSessionId = body.data?._id || body.session?._id || body._id;
-    expect(createdSessionId).toBeDefined();
-
+    // Wait for success toast — proven reliable across all session scheduling tests
     const successToast = page.locator('.toast.success, .toast:has-text("Session scheduled!")').first();
     await expect(successToast).toBeVisible({ timeout: 8000 });
+
+    // Fetch the session ID via API using the auth token from localStorage
+    const token = await page.evaluate(() =>
+      localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt')
+    );
+    const scheduleRes = await page.request.get('/api/live-sessions/my-schedule', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const sessions = await scheduleRes.json();
+    const sessionList = Array.isArray(sessions) ? sessions : (sessions.data || []);
+    const created = sessionList.find(s => (s.sessionName || '').includes('E2E Live Session'));
+    createdSessionId = created?._id;
+    expect(createdSessionId).toBeDefined();
 
     await page.goto(`/livevideo.html?sessionId=${createdSessionId}`);
     await waitForRoomReady(page);

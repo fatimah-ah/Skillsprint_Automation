@@ -20,8 +20,8 @@ async function clearBrowserStorage(page) {
 }
 
 async function loginViaApi(request, credentials) {
-  const context = await request.newContext({ baseURL: BASE_URL });
-  const response = await context.post('/api/auth/login', {
+  // `request` is already an APIRequestContext — use it directly
+  const response = await request.post('/api/auth/login', {
     data: {
       email: credentials.validUser.email,
       password: credentials.validUser.password
@@ -34,32 +34,28 @@ async function loginViaApi(request, credentials) {
   }
 
   const payload = await response.json();
-  await context.dispose();
   return payload.token;
 }
 
 async function cleanupTestTasks(request, token, titlePrefix = 'Build Playwright Framework - ') {
-  const context = await request.newContext({ baseURL: BASE_URL });
-  const tasksRes = await context.get('/api/tasks', {
+  // `request` is already an APIRequestContext — use it directly
+  const tasksRes = await request.get('/api/tasks', {
     headers: { Authorization: `Bearer ${token}` }
   });
 
   if (!tasksRes.ok()) {
     const body = await tasksRes.text();
-    await context.dispose();
     throw new Error(`Fetching tasks failed: ${tasksRes.status()} ${body}`);
   }
 
   const tasks = await tasksRes.json();
   for (const task of tasks) {
     if (task.title?.startsWith(titlePrefix)) {
-      await context.delete(`/api/tasks/${task._id}`, {
+      await request.delete(`/api/tasks/${task._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
     }
   }
-
-  await context.dispose();
 }
 
 async function cleanupTasksForUser(request, credentials, titlePrefix) {

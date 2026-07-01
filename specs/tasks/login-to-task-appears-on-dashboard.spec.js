@@ -36,6 +36,7 @@ test.describe('E2E Full Journey', () => {
 
     await page.locator('#taskTitle').fill(taskTitle);
     await page.locator('#taskDesc').fill('Automate SkillSprint E2E testing');
+    await page.locator('.p-btn[data-value="high"]').waitFor({ state: 'visible' });
     await page.locator('.p-btn[data-value="high"]').click();
 
     const dueDate = new Date();
@@ -46,11 +47,14 @@ test.describe('E2E Full Journey', () => {
     await page.locator('#subTaskInput').press('Enter');
     await expect(page.locator('#newSubTaskList')).toContainText('Write Page Object classes');
 
+    // Wait for the task creation API response before navigating away
+    const createResponsePromise = page.waitForResponse(
+      res => res.url().includes('/api/tasks') && res.ok(),
+      { timeout: 15000 }
+    );
     await page.locator('#createBtn').click();
+    await createResponsePromise; // ensures task is saved in the backend
     await expect(page.locator('.toast').first()).toContainText(/created|success/i, { timeout: 6000 });
-
-    // Give backend time to save before navigating away
-    await page.waitForTimeout(2500);
 
     // STEP 14-16: Back to Dashboard — verify
     await page.goto('/dashboard.html');
